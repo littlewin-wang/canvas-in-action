@@ -29,12 +29,15 @@
         var x = Math.random() * canvas.width;
         var y = Math.random() * canvas.height * 0.65;
         var a = Math.random() * 360;
-        drawStar(context, x, y, r, a);
+        drawRect(context, x, y, r, a);
       }
+
+      fillMoon(context, 2, 900, 200, 100, 30);
+
+      drawLand(context);
     }
 
-    function drawStar(context, x, y, r, rotate) {
-
+    function drawRect(context, x, y, r, rotate) {
       context.save();
 
       context.translate(x, y);
@@ -43,7 +46,7 @@
 
       //context.transform(r, 0, 0, r, x, y)
 
-      starPath(context);
+      pathStar(context);
 
       context.fillStyle = "#fb3";
       //context.strokeStyle = "#fd5";
@@ -56,7 +59,7 @@
       context.restore();
     }
 
-    function starPath(context) {
+    function pathStar(context) {
       context.beginPath();
       for (var i = 0; i < 5; i++) {
         context.lineTo(Math.cos((18 + i * 72) / 180 * Math.PI), -Math.sin((18 + i * 72) / 180 * Math.PI));
@@ -64,6 +67,48 @@
         context.lineTo(Math.cos((54 + i * 72) / 180 * Math.PI) * 0.5, -Math.sin((54 + i * 72) / 180 * Math.PI) * 0.5);
       }
       context.closePath();
+    }
+
+    function fillMoon(context, d, x, y, R, rotate, fillColor) {
+      context.save();
+      context.translate(x, y);
+      context.rotate(rotate * Math.PI / 180);
+      context.scale(R, R);
+      pathMoon(context, d);
+      context.fillStyle = fillColor || "#fd5";
+      context.fill();
+      context.restore();
+    }
+
+    function pathMoon(context, d) {
+      context.beginPath();
+      context.arc(0, 0, 1, 0.5*Math.PI, 1.5*Math.PI, true);
+      //context.moveTo(0, -1);
+      //context.arcTo(d, 0, 0, 1, dis(0, -1, d, 0) / d);
+      context.quadraticCurveTo(1.2, 0, 0, 1);
+      context.closePath();
+    }
+
+    function dis(x1, y1, x2, y2) {
+      return Math.sqrt((x1 - x2) * (x1 - x2) + (y1 - y2) * (y1 - y2));
+    }
+
+    function drawLand(context) {
+      context.save();
+      context.beginPath();
+      context.moveTo(0, 600);
+      context.bezierCurveTo(540, 400, 660, 800, 1200, 600);
+      context.lineTo(1200, 800);
+      context.lineTo(0, 800);
+      context.closePath();
+
+      var landStyle = context.createLinearGradient(0,800, 0, 0);
+      landStyle.addColorStop(0.0, '#030');
+      landStyle.addColorStop(1.0, '#580');
+      context.fillStyle = landStyle;
+
+      context.fill();
+      context.restore();
     }
   </script>
 </body>
