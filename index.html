@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>canvas-in-action</title>
+</head>
+<body style="height: 100%">
+  <canvas id="canvas">
+    当前浏览器不支持Canvas，请更换浏览器后再试
+  </canvas>
+
+  <script>
+    window.onload = function() {
+
+      var canvas = document.getElementById('canvas');
+      canvas.width = 1200;
+      canvas.height = 800;
+
+      var context = canvas.getContext("2d");
+
+      var skyStyle = context.createRadialGradient(canvas.width / 2, canvas.height, 0, canvas.width / 2, canvas.height, canvas.height);
+      skyStyle.addColorStop(0.0, '#035');
+      skyStyle.addColorStop(1.0, 'black');
+      context.fillStyle = skyStyle;
+      context.fillRect(0, 0, canvas.width, canvas.height);
+
+      for(var i = 0; i < 200; i++) {
+        var r = Math.random() * 5 + 5;
+        var x = Math.random() * canvas.width;
+        var y = Math.random() * canvas.height * 0.65;
+        var a = Math.random() * 360;
+        drawStar(context, x, y, r, a);
+      }
+    }
+
+    function drawStar(context, x, y, r, rotate) {
+
+      context.save();
+
+      context.translate(x, y);
+      context.rotate(rotate / 180 * Math.PI);
+      context.scale(r, r);
+
+      //context.transform(r, 0, 0, r, x, y)
+
+      starPath(context);
+
+      context.fillStyle = "#fb3";
+      //context.strokeStyle = "#fd5";
+      //lineWidth = 3;
+      //context.lineJoin = "round";
+      
+      context.fill();
+      //context.stroke();
+
+      context.restore();
+    }
+
+    function starPath(context) {
+      context.beginPath();
+      for (var i = 0; i < 5; i++) {
+        context.lineTo(Math.cos((18 + i * 72) / 180 * Math.PI), -Math.sin((18 + i * 72) / 180 * Math.PI));
+
+        context.lineTo(Math.cos((54 + i * 72) / 180 * Math.PI) * 0.5, -Math.sin((54 + i * 72) / 180 * Math.PI) * 0.5);
+      }
+      context.closePath();
+    }
+  </script>
+</body>
+</html>
